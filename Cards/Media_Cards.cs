@@ -46,7 +46,6 @@ namespace MRBuddy
             };
             return videoCard.ToAttachment();
         }
-
         public Attachment ImageCard()
         {
             return new Attachment
@@ -55,6 +54,18 @@ namespace MRBuddy
                 ContentType = "image/png",
                 ContentUrl = mediaCardPropertiesObj.ImageURL
             };
+        }
+
+        public Attachment HeroCard(List<string> optionkey)
+        {
+            var heroCard = new HeroCard();
+            heroCard.Title = mediaCardPropertiesObj.CardTitle;
+            heroCard.Buttons = new List<CardAction>();
+            foreach (var option in optionkey)
+            {
+                heroCard.Buttons.Add(new CardAction(ActionTypes.ImBack, option, value: option));
+            }
+            return heroCard.ToAttachment();
         }
     }
 }
