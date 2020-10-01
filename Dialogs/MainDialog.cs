@@ -1,10 +1,12 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-using System.Threading;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Builder.Dialogs.Adaptive;
+using Microsoft.Bot.Builder.Dialogs.Adaptive.Actions;
+using Microsoft.Bot.Builder.Dialogs.Adaptive.Conditions;
 
 namespace MRBuddy
 {
@@ -16,25 +18,31 @@ namespace MRBuddy
             : base(nameof(MainDialog))
         {
             _userState = userState;
-
-            AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
-            {
-                InitialStepAsync,
-                FinalStepAsync,
-            }));
-
-            InitialDialogId = nameof(WaterfallDialog);
+            var rootDialog = new AdaptiveDialog();
+            rootDialog.Recognizer = IntentRecognizer.CreateRecognizer();
+            rootDialog.Triggers = TriggerActions();
+            AddDialog(rootDialog);
+            InitialDialogId = nameof(AdaptiveDialog);
         }
 
-        private async Task<DialogTurnResult> InitialStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private List<OnCondition> TriggerActions()
         {
-            return await stepContext.EndDialogAsync(null, cancellationToken); //TO be removed 
-        }
+            var triggers = new List<OnCondition>
+                {
+                    /*
+                    for each recog pattern ontent code should be added here
+                     */
 
-        private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
-        {
-
-            return await stepContext.EndDialogAsync(null, cancellationToken);
+                    //new OnIntent() - to be replaced
+                    //{
+                    //    Actions = new List<Dialog>() { new CoilDialog() }
+                    //}
+                    new OnUnknownIntent()
+                    {
+                        Actions = new List<Dialog>() {new SendActivity("I am sorry I didnt understand your response !!")}
+                    },
+                };
+            return triggers;
         }
     }
 }
