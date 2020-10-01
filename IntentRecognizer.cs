@@ -2,7 +2,7 @@
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Recognizers;
 using System.Collections.Generic;
 
-namespace MrBuddy
+namespace MRBuddy
 {
     public static class IntentRecognizer
     {
