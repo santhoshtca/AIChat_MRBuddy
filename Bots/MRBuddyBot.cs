@@ -42,7 +42,7 @@ namespace MRBuddy
                     var welcomeCard = CreateAdaptiveCardAttachment();
                     var response = MessageFactory.Attachment(welcomeCard, ssml: "Welcome to Bot Framework!");
                     await turnContext.SendActivityAsync(response, cancellationToken);
-                    var reply = MessageFactory.Text("Hello !! How may i help you with?");
+                    var reply = MessageFactory.Text("Hello !! How can we help you?");
                     await turnContext.SendActivityAsync(reply, cancellationToken);
                 }
             }
