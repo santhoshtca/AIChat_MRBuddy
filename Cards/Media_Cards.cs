@@ -67,5 +67,18 @@ namespace MRBuddy
             }
             return heroCard.ToAttachment();
         }
+
+        public Attachment ThumbnailCard()
+        {
+            var thumbnailCard = new ThumbnailCard
+            {
+                Title = mediaCardPropertiesObj.CardTitle,
+                Subtitle = mediaCardPropertiesObj.CardSubtitle,               
+                Text = mediaCardPropertiesObj.CardText,
+                Images = new List<CardImage> { new CardImage(mediaCardPropertiesObj.ImageURL) }
+            };
+
+            return thumbnailCard.ToAttachment();
+        }
     }
 }

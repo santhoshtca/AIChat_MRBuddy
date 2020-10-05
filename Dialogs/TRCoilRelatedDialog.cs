@@ -11,15 +11,15 @@ using Microsoft.Bot.Builder.Dialogs;
 namespace MRBuddy
 {
     internal class TRCoilRelatedDialog : ComponentDialog
-    {
+    {       
         public TRCoilRelatedDialog()
         {
-           AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
-           {
+            AddDialog(new WaterfallDialog(nameof(WaterfallDialog), new WaterfallStep[]
+            {
                 CoilNameStepAsync,
                 RetreiveValueAsync,
-           }));
-           AddDialog(new TextPrompt(nameof(TextPrompt)));
+            }));
+            AddDialog(new TextPrompt(nameof(TextPrompt)));
             InitialDialogId = nameof(WaterfallDialog);
         }
 
@@ -30,7 +30,9 @@ namespace MRBuddy
 
         private static async Task<DialogTurnResult> RetreiveValueAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            await stepContext.Context.SendActivityAsync(stepContext.Result.ToString() + "is a T/R coil");
+            string coilType = CoilData.GetCoilType(stepContext.Result.ToString());
+            await stepContext.Context.SendActivityAsync(coilType);
+            
             await stepContext.Context.SendActivityAsync("Do you have any other issues?");
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }

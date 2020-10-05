@@ -12,7 +12,7 @@ namespace MRBuddy
             {
                 Intents = new List<IntentPattern>
                 {                    
-                     new IntentPattern("coil", "(?i)coil|rf|gradient|rf coil|gradient coil"),
+                     new IntentPattern("coil", "(?i)coil|Transmit/Receive|receive only"),
                      new IntentPattern("help", "(?i)help")                   
                 }
             };
