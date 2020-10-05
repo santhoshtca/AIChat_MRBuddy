@@ -7,7 +7,7 @@ namespace MRBuddy
 {
     public static class CoilData
     {
-        
+        private static  Dictionary<string, List<string>> _coilcombinationlist;
         private static List<CoilModel> GetCoilList()
         {
             List<CoilModel> lstCoil = new List<CoilModel>()
@@ -60,6 +60,38 @@ namespace MRBuddy
                 return coilName + " not found!";
             }
         }
+        public static string isCoilCombinationValid(string coilname1, string coilname2)
+        {
+            PopulateCoilCombintions();
+            string _retval = "Coil Combination is not recommended";
 
+            if (_coilcombinationlist.ContainsKey(coilname1.ToLower()))
+            {
+                bool combine = SearchList(_coilcombinationlist[coilname1], coilname2);
+                if (combine) _retval = "Recommended coil combination: Dual or multi coil imaging can be performed.";
+            }
+            else if (_coilcombinationlist.ContainsKey(coilname2.ToLower()))
+            {
+                bool combine = SearchList(_coilcombinationlist[coilname2], coilname1);
+                if (combine) _retval = "Recommended coil combination: Dual or multi coil imaging can be performed.";
+            }
+
+            return _retval;
+        }
+        private static void PopulateCoilCombintions()
+        {
+            _coilcombinationlist = new Dictionary<string, List<string>>();
+
+            _coilcombinationlist["sense headspine 8"] = new List<string>() { "Sense Flex L", "Sense Flex M", "Sense Flex S", "Sense Torso 16", "GP Flex L coil" };
+            _coilcombinationlist["sense hst"] = new List<string>() { "SENSE GP Flex L" };
+
+        }
+        private static bool SearchList(List<string> list, string keyword)
+        {
+            if (list.Contains(keyword, StringComparer.OrdinalIgnoreCase))
+                return true;
+            else
+                return false;
+        }
     }
 }
