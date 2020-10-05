@@ -8,13 +8,8 @@ namespace MRBuddy
 {
     public class Media_Cards
     {
-        MediaCardProperties mediaCardPropertiesObj = new MediaCardProperties();
-
-        public Media_Cards(MediaCardProperties mediaCardProperties)
-        {
-            mediaCardPropertiesObj = mediaCardProperties;
-        }
-        public Attachment VideoAttachment()
+                
+        public Attachment VideoAttachment(MediaCardProperties mediaCardPropertiesObj)
         {
             var videoCard = new VideoCard
             {
@@ -24,39 +19,44 @@ namespace MRBuddy
                 Text = mediaCardPropertiesObj.CardText,
                 Image = new ThumbnailUrl
                 {
-                    Url = mediaCardPropertiesObj.ImageURL,
+                    Url = mediaCardPropertiesObj.URL,
                 },
                 Media = new List<MediaUrl>
                 {
                     new MediaUrl()
                     {
-                        Url = mediaCardPropertiesObj.MediaURL,
+                        Url = mediaCardPropertiesObj.URL,
                     },
                 },
-                Buttons = new List<CardAction>
-                {
-                    new CardAction()
-                    {
-                        Title = mediaCardPropertiesObj.ButtonTitle,
-                        Type = ActionTypes.OpenUrl,
-                        Value =  mediaCardPropertiesObj.ButtonTitle,
-
-                    },
-                },
+               
             };
             return videoCard.ToAttachment();
         }
-        public Attachment ImageCard()
+        public Attachment ImageCard(MediaCardProperties mediaCardPropertiesObj)
         {
             return new Attachment
             {
                 Name = mediaCardPropertiesObj.CardTitle,
                 ContentType = "image/png",
-                ContentUrl = mediaCardPropertiesObj.ImageURL
+                ContentUrl = mediaCardPropertiesObj.URL
             };
         }
 
-        public Attachment HeroCard(List<string> optionkey)
+        /// <summary>
+        /// File attachment methoed returns an attachment type of all extension
+        /// </summary>
+        /// <returns></returns>
+        public Attachment FileAttachment(MediaCardProperties mediaCardPropertiesObj)
+        {
+            return new Attachment
+            {
+                Name = mediaCardPropertiesObj.CardTitle,
+                ContentType = "application/*",
+                ContentUrl = mediaCardPropertiesObj.URL
+            };
+        }
+
+        public Attachment HeroCard(List<string> optionkey, MediaCardProperties mediaCardPropertiesObj)
         {
             var heroCard = new HeroCard();
             heroCard.Title = mediaCardPropertiesObj.CardTitle;
@@ -68,14 +68,14 @@ namespace MRBuddy
             return heroCard.ToAttachment();
         }
 
-        public Attachment ThumbnailCard()
+        public Attachment ThumbnailCard(MediaCardProperties mediaCardPropertiesObj)
         {
             var thumbnailCard = new ThumbnailCard
             {
                 Title = mediaCardPropertiesObj.CardTitle,
-                Subtitle = mediaCardPropertiesObj.CardSubtitle,               
+                Subtitle = mediaCardPropertiesObj.CardSubtitle,
                 Text = mediaCardPropertiesObj.CardText,
-                Images = new List<CardImage> { new CardImage(mediaCardPropertiesObj.ImageURL) }
+                Images = new List<CardImage> { new CardImage(mediaCardPropertiesObj.URL) }
             };
 
             return thumbnailCard.ToAttachment();

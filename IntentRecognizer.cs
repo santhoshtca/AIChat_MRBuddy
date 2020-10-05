@@ -12,10 +12,16 @@ namespace MRBuddy
             {
                 Intents = new List<IntentPattern>
                 {                    
-                     new IntentPattern("coil", "(?i)coil|Transmit/Receive|receive only"),
-                     new IntentPattern("help", "(?i)help")                   
+                     new IntentPattern("combination", "(?i)Need help with coil combination"),
+                     new IntentPattern("information", "(?i)Need help with coil information"),
+                     new IntentPattern("examcard", "(?i)Examcard"),
+                     new IntentPattern("coil","(?i)Need help with T/R Coil Information"),
+                     new IntentPattern("default" , "(?i)default"),
+                     new IntentPattern("default" , "(?i)menu"),
+                     new IntentPattern("exit", "(?i)exit")
                 }
             };
         }
     }
 }
+

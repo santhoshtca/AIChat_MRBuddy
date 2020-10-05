@@ -10,8 +10,7 @@ namespace MRBuddy
         public String CardTitle { get; set; }
         public String CardSubtitle { get; set; }
         public String CardText { get; set; }
-        public String ImageURL{ get; set; }
-        public String MediaURL{ get; set; }
+        public String URL{ get; set; }
         public String ButtonTitle{ get; set; }
         public String Buttonvalue{ get; set; }
 

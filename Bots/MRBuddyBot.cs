@@ -39,11 +39,23 @@ namespace MRBuddy
                 // To learn more about Adaptive Cards, see https://aka.ms/msbot-adaptivecards for more details.
                 if (member.Id != turnContext.Activity.Recipient.Id)
                 {
+                    
                     var welcomeCard = CreateAdaptiveCardAttachment();
                     var response = MessageFactory.Attachment(welcomeCard, ssml: "Welcome to Bot Framework!");
                     await turnContext.SendActivityAsync(response, cancellationToken);
-                    var reply = MessageFactory.Text("Hello !! How can we help you?");
-                    await turnContext.SendActivityAsync(reply, cancellationToken);
+
+                    MediaCardProperties mediaCardProperties = new MediaCardProperties();
+                    mediaCardProperties.CardTitle = "Hello !! I can assist you with following queries?";
+
+                    Media_Cards media_Cards = new Media_Cards();
+                    List<string> options = new List<string>();
+                    options.Add("Need help with Examcards");
+                    options.Add("Need help with Coil Combination");
+                    options.Add("Need help with Coil Information");
+                    options.Add("Need help with T/R Coil Information");
+
+                    var promptMessage = (Activity)MessageFactory.Attachment(media_Cards.HeroCard(options, mediaCardProperties));
+                    await turnContext.SendActivityAsync(promptMessage, cancellationToken);
                 }
             }
         }

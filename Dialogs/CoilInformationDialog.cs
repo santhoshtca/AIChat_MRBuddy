@@ -41,10 +41,10 @@ namespace MRBuddy
                 mediaCardProperties.CardTitle = coil.CoilName + " (" + coil.CoilType + ")";
                 mediaCardProperties.CardSubtitle = coil.Applications;
                 mediaCardProperties.CardText = coil.Design;
-                mediaCardProperties.ImageURL = coil.ImagePath;
+                mediaCardProperties.URL = coil.ImagePath;
 
-                Media_Cards mediaCards = new Media_Cards(mediaCardProperties);
-                Attachment attachment = mediaCards.ThumbnailCard();
+                Media_Cards mediaCards = new Media_Cards();
+                Attachment attachment = mediaCards.ThumbnailCard(mediaCardProperties);
 
                 await stepContext.Context.SendActivityAsync(MessageFactory.Attachment(attachment));
             }
@@ -52,8 +52,18 @@ namespace MRBuddy
             {
                 await stepContext.Context.SendActivityAsync(stepContext.Result.ToString() +" not found!");
             }
-
-            await stepContext.Context.SendActivityAsync("Do you have any other issues?");
+           await stepContext.Context.SendActivityAsync("For more information about Coils , Please refer under Coils tab in User Documentation");
+           var reply = MessageFactory.Text("Do you have other queries ");
+            reply.SuggestedActions = new SuggestedActions()
+            {
+                Actions = new List<CardAction>()
+            {
+                new CardAction() { Title = "Yes", Type = ActionTypes.ImBack, Value = "default" },
+                new CardAction() { Title = "No", Type = ActionTypes.ImBack, Value = "exit"}
+            },
+            };
+            reply.InputHint = InputHints.ExpectingInput;
+            await stepContext.Context.SendActivityAsync(reply, cancellationToken);
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
     }
