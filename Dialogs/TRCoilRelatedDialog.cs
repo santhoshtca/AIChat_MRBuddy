@@ -2,11 +2,13 @@
 // Licensed under the MIT License.
 
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AdaptiveExpressions;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Dialogs;
+using Microsoft.Bot.Schema;
 
 namespace MRBuddy
 {
@@ -32,8 +34,18 @@ namespace MRBuddy
         {
             string coilType = CoilData.GetCoilType(stepContext.Result.ToString());
             await stepContext.Context.SendActivityAsync(coilType);
-            
-            await stepContext.Context.SendActivityAsync("Do you have any other issues?");
+
+            var reply = MessageFactory.Text("Do you have other queries ");
+            reply.SuggestedActions = new SuggestedActions()
+            {
+                Actions = new List<CardAction>()
+            {
+                new CardAction() { Title = "Yes", Type = ActionTypes.ImBack, Value = "default" },
+                new CardAction() { Title = "No", Type = ActionTypes.ImBack, Value = "exit"}
+            },
+            };
+            reply.InputHint = InputHints.ExpectingInput;
+            await stepContext.Context.SendActivityAsync(reply, cancellationToken);
             return await stepContext.EndDialogAsync(cancellationToken: cancellationToken);
         }
     }

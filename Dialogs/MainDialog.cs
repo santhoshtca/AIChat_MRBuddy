@@ -10,6 +10,7 @@ using Microsoft.Bot.Builder.Dialogs.Adaptive.Conditions;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Input;
 using Microsoft.Bot.Builder.Dialogs.Adaptive.Templates;
 using Microsoft.Bot.Builder.Dialogs.Choices;
+using MRBuddy.Dialogs;
 
 namespace MRBuddy
 {
@@ -32,50 +33,42 @@ namespace MRBuddy
             {
                 new OnIntent()
                 {
-                   Intent = "coil",
-                   Actions = CoilOptionDisplay()
+                    Intent="coil",
+                    Actions = new List<Dialog>(){ new TRCoilRelatedDialog()}
+                },
+                new OnIntent()
+                {
+                   Intent = "combination",
+                   Actions = new List<Dialog>() { new CoilCombinationDialog() }
+                },
+                new OnIntent()
+                {
+                   Intent = "information",
+                   Actions = new List<Dialog>() { new CoilInformationDialog() }
+                },
+                new OnIntent()
+                {
+                    Intent = "examcard",
+                    Actions = new List<Dialog>(){ new ExamCardDialog() }
+                },
+                new OnIntent()
+                {
+                    Intent = "default",
+                    Actions = new List<Dialog>(){ new DisplayHelpOption()}
+                },
+                  new OnIntent()
+                {
+                    Intent = "exit",
+                    Actions = new List<Dialog>(){ new SendActivity("Thank you for chatting with me!! If you would like to continue chat at any moment reply with Menu to get menu items") }
                 },
                 new OnUnknownIntent()
                 {
-                   Actions = new List<Dialog>() {new SendActivity("I am sorry I didnt understand your response !!")}
+                   Actions = new List<Dialog>() {new SendActivity("I'm still learning how to talk to people and dont understand your response!Please type Menu to get help menu")}
                 },
             };
             
             return triggers;
         }
-        private List<Dialog> CoilOptionDisplay()
-        {
-            var OptionDisplay = new List<Dialog>();
-            var ChoiceOption = new ChoiceInput()
-            {
-                Property = "turn.MainDialog.choice",
-                Style = ListStyle.Auto,
-                Prompt = new ActivityTemplate("We can assist you with the below Coil related questions"),
-                Choices = new ChoiceSet(new List<Choice>()
-                {
-                   new Choice("Queries related to coil combination"),
-                   new Choice("Queries related to coil information"),
-                   new Choice("Queries regarding T/R coils")
-                })
-                
-            };
-            var switchcase = new SwitchCondition()
-            {
-                Condition = "turn.MainDialog.choice",
-                Cases = new List<Case>()
-                {
-                    new Case("Queries related to coil combination", new List<Dialog>() { new CoilCombinationDialog() }),
-                    new Case("Queries related to coil information", new List<Dialog>() { new CoilInformationDialog() }),
-                    new Case("Queries regarding T/R coils", new List<Dialog>() { new TRCoilRelatedDialog() })
-                },
-                Default = new List<Dialog>()
-                {
-                    new SendActivity("Please Select from the option from above menu"),
-                }
-            };
-            OptionDisplay.Add(ChoiceOption);
-            OptionDisplay.Add(switchcase);
-            return OptionDisplay;
-        }
+    
     }
 }

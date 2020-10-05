@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Bot.Connector;
 
 namespace MRBuddy
 {
@@ -64,7 +66,7 @@ namespace MRBuddy
         {
             PopulateCoilCombintions();
             string _retval = "Coil Combination is not recommended";
-
+            coilname1 = coilname1.Replace(" ", "");
             if (_coilcombinationlist.ContainsKey(coilname1.ToLower()))
             {
                 bool combine = SearchList(_coilcombinationlist[coilname1], coilname2);
@@ -82,16 +84,21 @@ namespace MRBuddy
         {
             _coilcombinationlist = new Dictionary<string, List<string>>();
 
-            _coilcombinationlist["sense headspine 8"] = new List<string>() { "Sense Flex L", "Sense Flex M", "Sense Flex S", "Sense Torso 16", "GP Flex L coil" };
-            _coilcombinationlist["sense hst"] = new List<string>() { "SENSE GP Flex L" };
+            _coilcombinationlist["senseheadspine8"] = new List<string>() { "Sense Flex L", "Sense Flex M", "Sense Flex S", "Sense Torso 16", "GP Flex L coil" };
+            _coilcombinationlist["sensehst"] = new List<string>() { "SENSE GP Flex L" };
 
         }
-        private static bool SearchList(List<string> list, string keyword)
+        private static bool SearchList(List<string> coillist, string keyword)
         {
-            if (list.Contains(keyword, StringComparer.OrdinalIgnoreCase))
-                return true;
-            else
-                return false;
+            bool _retval = false;
+            foreach(var coil in coillist)
+            {
+                if(String.Compare(coil,keyword, CultureInfo.CurrentCulture, CompareOptions.IgnoreCase | CompareOptions.IgnoreSymbols) == 0)
+                {
+                    _retval = true;
+                }
+            }
+            return _retval;
         }
     }
 }
